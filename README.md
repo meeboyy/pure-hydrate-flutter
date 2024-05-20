@@ -1,3 +1,2 @@
-# pure_hydrate
-
-A new Flutter project.
+##Pure Hydrate
+Water Drinking Reminder - Flutter Project
