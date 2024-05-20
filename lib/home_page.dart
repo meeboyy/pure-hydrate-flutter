@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pure_hydrate/models/water_consumtion_entry_model.dart';
 import 'package:pure_hydrate/models/water_intake_model.dart';
+import 'package:pure_hydrate/services/clipper.dart';
 
 class HomePage extends StatefulWidget {
   final List<WaterConsumptionEntry>? historyEntries;
@@ -189,22 +190,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(border: Border.all(width: 2)),
-                    width: 100,
-                    height: 200,
+                  ClipPath(
+                    clipper: BottleClipper(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(width: 2)),
+                      width: 200,
+                      height: 200,
+                    ),
                   ),
-                  AnimatedContainer(
-                    width: 100,
-                    height: _waterHeight,
-                    curve: Curves.easeInOut,
-                    duration: Duration(milliseconds: 1000),
-                    child: CustomPaint(
-                      painter: MyPainter(
-                        firstAnimation.value,
-                        secondAnimation.value,
-                        thirdAnimation.value,
-                        fourthAnimation.value,
+                  ClipPath(
+                    clipper: BottleClipper(),
+                    child: AnimatedContainer(
+                      width: 200,
+                      height: _waterHeight,
+                      curve: Curves.easeInOut,
+                      duration: Duration(milliseconds: 1000),
+                      child: CustomPaint(
+                        painter: MyPainter(
+                          firstAnimation.value,
+                          secondAnimation.value,
+                          thirdAnimation.value,
+                          fourthAnimation.value,
+                        ),
                       ),
                     ),
                   ),

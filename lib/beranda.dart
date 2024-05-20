@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
       isReminderEnable: true,
       reminderInterval: 60,
       reminderSound: "Beep",
-      isDarkTheme: true);
+      isDarkTheme: false);
 
   @override
   Widget build(BuildContext context) {
