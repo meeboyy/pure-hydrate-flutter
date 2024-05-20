@@ -13,9 +13,6 @@ class BottleClipper extends CustomClipper<Path> {
     path.quadraticBezierTo(
         size.width * 0.75, size.height, size.width * 0.75, size.height * 0.9);
     path.lineTo(size.width * 0.75, 0);
-    // path.quadraticBezierTo(size.width * 0.75, 0, size.width * 0.5, 0);
-    // path.quadraticBezierTo(
-    //     size.width * 0.25, 0, size.width * 0.25, size.height * 0.1);
 
     return path;
   }
@@ -24,4 +21,27 @@ class BottleClipper extends CustomClipper<Path> {
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return false;
   }
+}
+
+class BorderPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path();
+    path.moveTo(size.width * 0.25, 0);
+    path.lineTo(size.width * 0.25, size.height * 0.9);
+    path.quadraticBezierTo(
+        size.width * 0.25, size.height, size.width * 0.5, size.height);
+    path.quadraticBezierTo(
+        size.width * 0.75, size.height, size.width * 0.75, size.height * 0.9);
+    path.lineTo(size.width * 0.75, 0);
+    final paint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 6;
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

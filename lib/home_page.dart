@@ -19,6 +19,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // late AnimationController _controller;
   double _waterHeight = 200;
+  double _glassHeight = 200;
+  double _glassWidth = 200;
   late AnimationController firstController;
   late Animation<double> firstAnimation;
 
@@ -190,23 +192,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-                  ClipPath(
-                    clipper: BottleClipper(),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(width: 2)),
-                      width: 200,
-                      height: 200,
+                  Container(
+                    height: _glassHeight,
+                    alignment: Alignment.center,
+                    child: Text("${_waterHeight.toString()}"),
+                  ),
+                  Container(
+                    color: Colors.transparent,
+                    child: CustomPaint(
+                      painter: BorderPainter(),
                     ),
+                    width: _glassWidth,
+                    height: _glassHeight,
                   ),
                   ClipPath(
                     clipper: BottleClipper(),
-                    child: AnimatedContainer(
-                      width: 200,
+                    child: SizedBox(
                       height: _waterHeight,
-                      curve: Curves.easeInOut,
-                      duration: Duration(milliseconds: 1000),
                       child: CustomPaint(
                         painter: MyPainter(
                           firstAnimation.value,
@@ -238,28 +240,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               //   onPressed: _navigateToAddWaterPage,
               //   child: Text('Add Water'),
               // ),
-              SizedBox(height: 20),
-              Text(
-                'Riwayat minum air hari ini :',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              // SizedBox(height: 20),
+              // Text(
+              //   'Riwayat minum air hari ini :',
+              //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              // ),
 
-              Expanded(
-                child: ListView.builder(
-                  itemCount: todayEntries?.length,
-                  itemBuilder: (context, index) {
-                    if (todayEntries!.isNotEmpty) {
-                      final entry = todayEntries![index];
-                      return ListTile(
-                        title: Text('Jumlah: ${entry.amount} ml'),
-                        subtitle: Text(
-                            'Jam: ${entry.timestamp.hour}:${entry.timestamp.minute}'),
-                      );
-                    }
-                    return Text("Hari ini belum minum");
-                  },
-                ),
-              ),
+              // Expanded(
+              //   child: ListView.builder(
+              //     itemCount: todayEntries?.length,
+              //     itemBuilder: (context, index) {
+              //       if (todayEntries!.isNotEmpty) {
+              //         final entry = todayEntries![index];
+              //         return ListTile(
+              //           title: Text('Jumlah: ${entry.amount} ml'),
+              //           subtitle: Text(
+              //               'Jam: ${entry.timestamp.hour}:${entry.timestamp.minute}'),
+              //         );
+              //       }
+              //       return Text("Hari ini belum minum");
+              //     },
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -284,7 +286,7 @@ class MyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Color(0xff3B6ABA).withOpacity(.8)
+      ..color = Color(0xff3B6ABA).withOpacity(.5)
       ..style = PaintingStyle.fill;
 
     var path = Path()
