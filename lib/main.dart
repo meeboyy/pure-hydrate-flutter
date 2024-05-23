@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pure_hydrate/beranda.dart';
 import 'package:pure_hydrate/models/settings_model.dart';
 import 'package:pure_hydrate/models/water_intake_model.dart';
@@ -12,10 +13,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Water Reminder',
-        home: MyHomePage(
-          waterIntake: WaterIntake(dailyGoal: 3000),
-        ));
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    return MaterialApp(title: 'Water Reminder', home: MyHomePage());
   }
 }

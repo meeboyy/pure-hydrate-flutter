@@ -10,14 +10,18 @@ import 'package:pure_hydrate/services/theme.dart';
 import 'package:pure_hydrate/setting_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  final WaterIntake waterIntake;
-
-  MyHomePage({super.key, required this.waterIntake});
+  MyHomePage({super.key});
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  double initialButtonHeight = 8.0;
+  late double _buttonOneHeight = initialButtonHeight;
+  late double _buttonTwoHeight = initialButtonHeight;
+  late double _buttonThreeHeight = initialButtonHeight;
+  bool _isPressed = false;
+
   Map<String, dynamic> _userInfo = {
     'name': 'John Doe',
     'age': 25,
@@ -25,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'dailyGoal': 2450,
   };
 
+  late WaterIntake waterIntake = WaterIntake(dailyGoal: _userInfo['dailyGoal']);
   void _updateUserInfo(Map<String, dynamic> updatedInfo) {
     setState(() {
       _userInfo = updatedInfo;
@@ -37,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _updateDailyGoal(int newGoal) {
     setState(() {
-      widget.waterIntake.dailyGoal = newGoal;
+      waterIntake.dailyGoal = newGoal;
     });
   }
 
@@ -53,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addWater(int amount) {
     setState(() {
-      widget.waterIntake.currentIntake += amount;
+      waterIntake.currentIntake += amount;
     });
   }
 
@@ -64,7 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
     _widgetOptions = <Widget>[
       HomePage(
         historyEntries: historyEntries,
-        waterIntake: widget.waterIntake,
+        waterIntake: waterIntake,
+        onAddWater: _addWater,
       ),
       HistoryPage(
         historyEntries: historyEntries,
@@ -75,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       SettingsPage(
         updateSettings: _updateSettings,
-        waterIntake: widget.waterIntake,
+        waterIntake: waterIntake,
         onDailyGoalChanged: _updateDailyGoal,
         settingsModel: _settingsModel,
       ),
@@ -114,32 +120,127 @@ class _MyHomePageState extends State<MyHomePage> {
         theme: _settingsModel.isDarkTheme ? darkThemeCustom : lightThemeCustom,
         home: Scaffold(
           body: _widgetOptions!.elementAt(_selectedIndex),
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+          floatingActionButton: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 600),
+                bottom: _buttonThreeHeight,
+                right: 16.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // Add your logic here
+                    setState(() {
+                      _selectedIndex = 3;
+                    });
+                  },
+                  child: Icon(Icons.settings),
+                  backgroundColor: Colors.blue,
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history),
-                label: 'History',
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 400),
+                bottom: _buttonTwoHeight,
+                right: 16.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // Add your logic here
+                    setState(() {
+                      _selectedIndex = 1;
+                      buttonAction();
+                    });
+                  },
+                  child: Icon(Icons.history),
+                  backgroundColor: Colors.blue,
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.add),
-                label: 'Add Water',
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 200),
+                bottom: _buttonOneHeight,
+                right: 16.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // Add your logic here
+                    setState(() {
+                      _selectedIndex = 0;
+                      buttonAction();
+                    });
+                  },
+                  child: Icon(Icons.home),
+                  backgroundColor: Colors.blue,
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
+              Positioned(
+                bottom: initialButtonHeight,
+                right: 16.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // Add your logic here
+                    setState(() {
+                      buttonAction();
+                    });
+                  },
+                  child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      transitionBuilder: (child, anim) => RotationTransition(
+                            turns: child.key == ValueKey('icon1')
+                                ? Tween<double>(begin: 1, end: 0.75)
+                                    .animate(anim)
+                                : Tween<double>(begin: 0.75, end: 1)
+                                    .animate(anim),
+                            child: ScaleTransition(scale: anim, child: child),
+                          ),
+                      child: _isPressed
+                          ? Icon(Icons.close, key: const ValueKey('icon1'))
+                          : Icon(
+                              Icons.menu,
+                              key: const ValueKey('icon2'),
+                            )),
+                  backgroundColor: Colors.blue,
+                ),
               ),
             ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
           ),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   items: const <BottomNavigationBarItem>[
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.home),
+          //       label: 'Home',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.history),
+          //       label: 'History',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.add),
+          //       label: 'Add Water',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.settings),
+          //       label: 'Settings',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.person),
+          //       label: 'Profile',
+          //     ),
+          //   ],
+          //   currentIndex: _selectedIndex,
+          //   onTap: _onItemTapped,
+          // ),
         ));
+  }
+
+  buttonAction() {
+    if (!_isPressed) {
+      _buttonOneHeight += 80;
+      _buttonTwoHeight += 160;
+      _buttonThreeHeight += 240;
+      _isPressed = true;
+    } else {
+      _buttonOneHeight = initialButtonHeight;
+      _buttonTwoHeight = initialButtonHeight;
+      _buttonThreeHeight = initialButtonHeight;
+      _isPressed = false;
+    }
+    ;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:pure_hydrate/models/water_consumtion_entry_model.dart';
@@ -8,8 +9,12 @@ import 'package:pure_hydrate/services/clipper.dart';
 class HomePage extends StatefulWidget {
   final List<WaterConsumptionEntry>? historyEntries;
   final WaterIntake waterIntake;
+  final Function(int) onAddWater;
   const HomePage(
-      {Key? key, required this.waterIntake, required this.historyEntries})
+      {Key? key,
+      required this.waterIntake,
+      required this.historyEntries,
+      required this.onAddWater})
       : super(key: key);
 
   @override
@@ -18,9 +23,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // late AnimationController _controller;
-  double _waterHeight = 200;
-  double _glassHeight = 200;
-  double _glassWidth = 200;
+  bool _isNotDrink = true;
+  late double _downBone;
+  late double _downBtwo;
+  late int remainWater;
+
+  var pixelRatio = window.devicePixelRatio;
+  Size logicalScreenSize = WidgetsBinding.instance.window.physicalSize /
+      WidgetsBinding.instance.window.devicePixelRatio;
+  late double _waterHeight;
+  double _glassHeight = WidgetsBinding.instance.window.physicalSize.height;
+  double _glassWidth = WidgetsBinding.instance.window.physicalSize.width;
   late AnimationController firstController;
   late Animation<double> firstAnimation;
 
@@ -38,10 +51,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _downBone = 20;
+    _downBtwo = 20;
+
     todayEntries = getTodayEntries();
     firstController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1500));
-    firstAnimation = Tween<double>(begin: 1.9, end: 2.1).animate(
+    firstAnimation = Tween<double>(begin: 10, end: 8).animate(
         CurvedAnimation(parent: firstController, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
@@ -56,7 +73,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     secondController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1500));
-    secondAnimation = Tween<double>(begin: 1.8, end: 2.4).animate(
+    secondAnimation = Tween<double>(begin: 20, end: 0).animate(
         CurvedAnimation(parent: secondController, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
@@ -71,7 +88,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     thirdController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1500));
-    thirdAnimation = Tween<double>(begin: 1.8, end: 2.4).animate(
+    thirdAnimation = Tween<double>(begin: 20, end: 0).animate(
         CurvedAnimation(parent: thirdController, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
@@ -86,7 +103,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     fourthController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1500));
-    fourthAnimation = Tween<double>(begin: 1.9, end: 2.1).animate(
+    fourthAnimation = Tween<double>(begin: 10, end: 8).animate(
         CurvedAnimation(parent: fourthController, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
@@ -134,9 +151,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double progress =
-        widget.waterIntake.currentIntake / widget.waterIntake.dailyGoal;
-    progress = progress > 1 ? 1 : progress;
+    _waterHeight = logicalScreenSize.height - widget.waterIntake.currentIntake;
+    _waterHeight <= 0 ? _waterHeight = 0 : _waterHeight;
+    remainWater =
+        widget.waterIntake.dailyGoal - widget.waterIntake.currentIntake;
+    int progress = ((remainWater / widget.waterIntake.dailyGoal) * 100).toInt();
+    progress <= 0 ? progress = 0 : progress;
 
     void _addWater(int amount) {
       setState(() {
@@ -154,119 +174,153 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Water Reminder'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Daily Goal: ${widget.waterIntake.dailyGoal} ml',
-                style: TextStyle(fontSize: 20),
-              ),
-              Text(
-                'Today\'s Water Intake',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              // SizedBox(height: 20),
-              // SizedBox(
-              //   height: 200,
-              //   width: 200,
-              //   child: CircularProgressIndicator(
-              //     value: progress,
-              //     strokeWidth: 20,
-              //     backgroundColor: Colors.grey[300],
-              //     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-              //   ),
-              // ),
-              SizedBox(height: 20),
-              Text(
-                '${widget.waterIntake.currentIntake} / ${widget.waterIntake.dailyGoal} ml',
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 20),
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Container(
-                    height: _glassHeight,
-                    alignment: Alignment.center,
-                    child: Text("${_waterHeight.toString()}"),
-                  ),
-                  Container(
-                    color: Colors.transparent,
-                    child: CustomPaint(
-                      painter: BorderPainter(),
-                    ),
-                    width: _glassWidth,
-                    height: _glassHeight,
-                  ),
-                  ClipPath(
-                    clipper: BottleClipper(),
-                    child: SizedBox(
-                      height: _waterHeight,
-                      child: CustomPaint(
-                        painter: MyPainter(
-                          firstAnimation.value,
-                          secondAnimation.value,
-                          thirdAnimation.value,
-                          fourthAnimation.value,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _waterHeight >= 0 ? _waterHeight -= 50 : _waterHeight = 0;
-                  });
-                },
-                child: Text('Add 250 ml'),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _addWater(500),
-                child: Text('Add 500 ml'),
-              ),
-              // SizedBox(height: 40),
-              // ElevatedButton(
-              //   onPressed: _navigateToAddWaterPage,
-              //   child: Text('Add Water'),
-              // ),
-              // SizedBox(height: 20),
-              // Text(
-              //   'Riwayat minum air hari ini :',
-              //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              // ),
-
-              // Expanded(
-              //   child: ListView.builder(
-              //     itemCount: todayEntries?.length,
-              //     itemBuilder: (context, index) {
-              //       if (todayEntries!.isNotEmpty) {
-              //         final entry = todayEntries![index];
-              //         return ListTile(
-              //           title: Text('Jumlah: ${entry.amount} ml'),
-              //           subtitle: Text(
-              //               'Jam: ${entry.timestamp.hour}:${entry.timestamp.minute}'),
-              //         );
-              //       }
-              //       return Text("Hari ini belum minum");
-              //     },
-              //   ),
-              // ),
-            ],
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            height: _glassHeight,
+            alignment: Alignment.center,
+            child: Text(
+              "${progress.toString()}%",
+              style: TextStyle(fontSize: 80),
+            ),
           ),
-        ),
+          Positioned(
+            top: 90,
+            child: Visibility(
+                visible: progress <= 0 ? true : false,
+                child: Text("Congratulation!! You Finish Today's Goal ")),
+          ),
+          AnimatedContainer(
+            curve: Curves.easeInOut,
+            height: _waterHeight,
+            width: _glassWidth,
+            duration: Duration(milliseconds: 1500),
+            child: CustomPaint(
+              painter: MyPainter(
+                firstAnimation.value,
+                secondAnimation.value,
+                thirdAnimation.value,
+                fourthAnimation.value,
+              ),
+            ),
+          ),
+          // Container(
+          //   color: Colors.transparent,
+          //   child: CustomPaint(
+          //     painter: BorderPainter(),
+          //   ),
+          //   width: _glassWidth,
+          //   height: _glassHeight,
+          // ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Today\'s Water Intake',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Daily Goal: ${widget.waterIntake.dailyGoal} ml',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  // SizedBox(height: 20),
+                  // SizedBox(
+                  //   height: 200,
+                  //   width: 200,
+                  //   child: CircularProgressIndicator(
+                  //     value: progress,
+                  //     strokeWidth: 20,
+                  //     backgroundColor: Colors.grey[300],
+                  //     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  //   ),
+                  // ),
+
+                  SizedBox(height: 20),
+
+                  // SizedBox(height: 20),
+                  // ElevatedButton(
+                  //   onPressed: () => _addWater(500),
+                  //   child: Text('Add 500 ml'),
+                  // ),
+                ]),
+          ),
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 400),
+            bottom: _downBone,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  widget.onAddWater(250);
+                });
+              },
+              child: Text(' 250 ml'),
+            ),
+          ),
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 200),
+            bottom: _downBtwo,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  _waterHeight >= 200 ? _waterHeight -= 200 : _waterHeight = 0;
+                  remainWater = remainWater - 500;
+                });
+              },
+              child: Text('500 ml'),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  buttonAction();
+                });
+              },
+              child: Text('DRINK'),
+            ),
+          )
+        ],
       ),
     );
+  }
+
+  buttonAction() {
+    if (_isNotDrink) {
+      _downBone = 100;
+      _downBtwo = 60;
+      _isNotDrink = false;
+    } else {
+      _downBone = 20;
+      _downBtwo = 20;
+      _isNotDrink = true;
+    }
+    ;
   }
 }
 
@@ -283,17 +337,24 @@ class MyPainter extends CustomPainter {
     this.fourthValue,
   );
 
+  double one = 8;
+  double two = 0;
+  double three = 8;
+
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Color(0xff3B6ABA).withOpacity(.5)
+      ..color = Color(0xff3B6ABA).withOpacity(.8)
       ..style = PaintingStyle.fill;
 
     var path = Path()
-      ..moveTo(0, 35 / firstValue)
-      ..cubicTo(size.width * .4, 20 / secondValue, size.width * .7,
-          30 / thirdValue, size.width, 35 / fourthValue)
+      ..moveTo(0, firstValue)
+      ..cubicTo(size.width * .4, secondValue, size.width * .7, thirdValue,
+          size.width, fourthValue)
       ..lineTo(size.width, size.height)
+      // ..quadraticBezierTo(
+      //     size.width * 0.99, size.height, size.width * 0.5, size.height)
+      // ..quadraticBezierTo(size.width * 0.01, size.height, 0, size.height * 0.9)
       ..lineTo(0, size.height);
 
     canvas.drawPath(path, paint);

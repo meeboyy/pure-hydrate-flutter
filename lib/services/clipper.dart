@@ -26,17 +26,14 @@ class BottleClipper extends CustomClipper<Path> {
 class BorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final path = Path();
-    path.moveTo(size.width * 0.25, 0);
-    path.lineTo(size.width * 0.25, size.height * 0.9);
-    path.quadraticBezierTo(
-        size.width * 0.25, size.height, size.width * 0.5, size.height);
-    path.quadraticBezierTo(
-        size.width * 0.75, size.height, size.width * 0.75, size.height * 0.9);
-    path.lineTo(size.width * 0.75, 0);
+    var path = Path()
+      ..lineTo(0, size.height * 0.9)
+      ..quadraticBezierTo(size.width * 0.01, 200, size.width * 0.5, 200)
+      ..quadraticBezierTo(size.width * 0.99, 200, size.width, 200 * 0.9)
+      ..lineTo(size.width, 0);
     final paint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
+      ..color = Colors.black.withOpacity(.2)
+      ..style = PaintingStyle.fill
       ..strokeWidth = 6;
 
     canvas.drawPath(path, paint);
