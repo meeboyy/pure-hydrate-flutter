@@ -20,6 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late double _buttonOneHeight = initialButtonHeight;
   late double _buttonTwoHeight = initialButtonHeight;
   late double _buttonThreeHeight = initialButtonHeight;
+  late double _buttonFourHeight = initialButtonHeight;
   bool _isPressed = false;
 
   Map<String, dynamic> _userInfo = {
@@ -123,6 +124,21 @@ class _MyHomePageState extends State<MyHomePage> {
           floatingActionButton: Stack(
             children: [
               AnimatedPositioned(
+                duration: Duration(milliseconds: 800),
+                bottom: _buttonFourHeight,
+                right: 16.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // Add your logic here
+                    setState(() {
+                      _selectedIndex = 4;
+                    });
+                  },
+                  child: Icon(Icons.person),
+                  backgroundColor: Colors.blue,
+                ),
+              ),
+              AnimatedPositioned(
                 duration: Duration(milliseconds: 600),
                 bottom: _buttonThreeHeight,
                 right: 16.0,
@@ -158,6 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: _buttonOneHeight,
                 right: 16.0,
                 child: FloatingActionButton(
+                  autofocus: true,
                   onPressed: () {
                     // Add your logic here
                     setState(() {
@@ -234,11 +251,13 @@ class _MyHomePageState extends State<MyHomePage> {
       _buttonOneHeight += 80;
       _buttonTwoHeight += 160;
       _buttonThreeHeight += 240;
+      _buttonFourHeight += 320;
       _isPressed = true;
     } else {
       _buttonOneHeight = initialButtonHeight;
       _buttonTwoHeight = initialButtonHeight;
       _buttonThreeHeight = initialButtonHeight;
+      _buttonFourHeight = initialButtonHeight;
       _isPressed = false;
     }
     ;

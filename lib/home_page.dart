@@ -151,12 +151,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _waterHeight = logicalScreenSize.height - widget.waterIntake.currentIntake;
-    _waterHeight <= 0 ? _waterHeight = 0 : _waterHeight;
     remainWater =
         widget.waterIntake.dailyGoal - widget.waterIntake.currentIntake;
     int progress = ((remainWater / widget.waterIntake.dailyGoal) * 100).toInt();
     progress <= 0 ? progress = 0 : progress;
+
+    double percWater = progress / 100 * logicalScreenSize.height;
+    double decrWater = logicalScreenSize.height - percWater;
+
+    _waterHeight = logicalScreenSize.height - decrWater;
+    _waterHeight <= 0 ? _waterHeight = 0 : _waterHeight;
 
     void _addWater(int amount) {
       setState(() {
@@ -312,8 +316,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   buttonAction() {
     if (_isNotDrink) {
-      _downBone = 100;
-      _downBtwo = 60;
+      _downBone = 120;
+      _downBtwo = 70;
       _isNotDrink = false;
     } else {
       _downBone = 20;
@@ -344,7 +348,14 @@ class MyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Color(0xff3B6ABA).withOpacity(.8)
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color.fromARGB(255, 124, 161, 225).withOpacity(.8),
+          Color.fromARGB(255, 0, 92, 197).withOpacity(.8),
+        ],
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
       ..style = PaintingStyle.fill;
 
     var path = Path()

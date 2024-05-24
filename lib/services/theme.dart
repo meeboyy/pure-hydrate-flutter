@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 final ThemeData lightThemeCustom = ThemeData(
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Color(0xFFCCE5FF),
-    selectedItemColor: Color.fromARGB(255, 19, 123, 168),
-    unselectedItemColor: Color.fromARGB(255, 127, 161, 175),
-    type: BottomNavigationBarType.fixed,
-  ),
-  primaryColor: const Color(0xffCCE5FF),
-  scaffoldBackgroundColor: Colors.white,
+  // bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+  //   backgroundColor: Color(0xFFCCE5FF),
+  //   selectedItemColor: Color.fromARGB(255, 19, 123, 168),
+  //   unselectedItemColor: Color.fromARGB(255, 127, 161, 175),
+  //   type: BottomNavigationBarType.fixed,
+  // ),
+  primaryColor: const Color(0xff1976D2),
+  scaffoldBackgroundColor: Color(0xFFE3F2FD),
   appBarTheme: const AppBarTheme(
     color: Color(0xFFCCE5FF),
     titleTextStyle: TextStyle(
@@ -17,19 +17,27 @@ final ThemeData lightThemeCustom = ThemeData(
       color: Color.fromARGB(255, 19, 123, 168),
     ),
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    splashColor: Color(0xFF64B5F6),
+    focusColor: Color(0xFF64B5F6),
+    hoverColor: const Color(0xFF1976D2),
+    foregroundColor: Color.fromARGB(255, 39, 38, 38),
+    backgroundColor: const Color(0xFF1976D2),
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+    elevation: 8.0,
     textStyle: const TextStyle(
       fontWeight: FontWeight.bold,
-      color: Color.fromARGB(255, 19, 123, 168),
+      color: Color.fromARGB(255, 104, 205, 248),
     ),
-    foregroundColor: const Color.fromARGB(255, 19, 123, 168),
-    backgroundColor: const Color(0xFFCCE5FF),
+    foregroundColor: Color.fromARGB(255, 39, 38, 38),
+    backgroundColor: Color.fromARGB(255, 120, 187, 255),
     minimumSize: const Size(88, 36),
     padding: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(6)),
-    ),
+        borderRadius: BorderRadius.all(Radius.circular(6)),
+        side: BorderSide(width: 18.0, color: Colors.black)),
   )),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(color: Colors.black),
