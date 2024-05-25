@@ -8,11 +8,8 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Water Consumption History'),
-      ),
-      body: ListView.builder(
+    return Container(
+      child: ListView.builder(
         itemCount: historyEntries.length,
         itemBuilder: (context, index) {
           final entry = historyEntries[index];

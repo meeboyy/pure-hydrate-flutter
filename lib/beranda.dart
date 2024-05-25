@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   List<Widget>? _widgetOptions;
 
   void _addWater(int amount) {
@@ -120,7 +120,32 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
         theme: _settingsModel.isDarkTheme ? darkThemeCustom : lightThemeCustom,
         home: Scaffold(
-          body: _widgetOptions!.elementAt(_selectedIndex),
+          body: Stack(
+            children: [
+              HomePage(
+                historyEntries: historyEntries,
+                waterIntake: waterIntake,
+                onAddWater: _addWater,
+              ),
+              Visibility(
+                visible: _selectedIndex != 0 ? true : false,
+                child: Center(
+                  child: Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: _widgetOptions!.elementAt(_selectedIndex),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
           floatingActionButton: Stack(
             children: [
               AnimatedPositioned(
@@ -132,10 +157,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     // Add your logic here
                     setState(() {
                       _selectedIndex = 4;
+                      buttonAction();
                     });
                   },
                   child: Icon(Icons.person),
-                  backgroundColor: Colors.blue,
                 ),
               ),
               AnimatedPositioned(
@@ -147,10 +172,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     // Add your logic here
                     setState(() {
                       _selectedIndex = 3;
+                      buttonAction();
                     });
                   },
                   child: Icon(Icons.settings),
-                  backgroundColor: Colors.blue,
                 ),
               ),
               AnimatedPositioned(
@@ -166,7 +191,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   },
                   child: Icon(Icons.history),
-                  backgroundColor: Colors.blue,
                 ),
               ),
               AnimatedPositioned(
@@ -183,7 +207,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   },
                   child: Icon(Icons.home),
-                  backgroundColor: Colors.blue,
                 ),
               ),
               Positioned(
@@ -212,7 +235,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               Icons.menu,
                               key: const ValueKey('icon2'),
                             )),
-                  backgroundColor: Colors.blue,
                 ),
               ),
             ],

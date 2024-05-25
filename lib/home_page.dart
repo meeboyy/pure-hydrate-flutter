@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             alignment: Alignment.center,
             child: Text(
               "${progress.toString()}%",
-              style: TextStyle(fontSize: 80),
+              style: TextStyle(fontSize: 80, fontFamily: "Poppins"),
             ),
           ),
           Positioned(
@@ -217,40 +217,53 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           //   width: _glassWidth,
           //   height: _glassHeight,
           // ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Today\'s Water Intake',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Daily Goal: ${widget.waterIntake.dailyGoal} ml',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  // SizedBox(height: 20),
-                  // SizedBox(
-                  //   height: 200,
-                  //   width: 200,
-                  //   child: CircularProgressIndicator(
-                  //     value: progress,
-                  //     strokeWidth: 20,
-                  //     backgroundColor: Colors.grey[300],
-                  //     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                  //   ),
-                  // ),
+          Positioned(
+            top: 40,
+            child: Card(
+              elevation: 12,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox.fromSize(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Today\'s Water Intake',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Text(
+                          'Daily Goal: ${widget.waterIntake.dailyGoal} ml',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                        // SizedBox(height: 20),
+                        // SizedBox(
+                        //   height: 200,
+                        //   width: 200,
+                        //   child: CircularProgressIndicator(
+                        //     value: progress,
+                        //     strokeWidth: 20,
+                        //     backgroundColor: Colors.grey[300],
+                        //     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                        //   ),
+                        // ),
 
-                  SizedBox(height: 20),
-
-                  // SizedBox(height: 20),
-                  // ElevatedButton(
-                  //   onPressed: () => _addWater(500),
-                  //   child: Text('Add 500 ml'),
-                  // ),
-                ]),
+                        // SizedBox(height: 20),
+                        // ElevatedButton(
+                        //   onPressed: () => _addWater(500),
+                        //   child: Text('Add 500 ml'),
+                        // ),
+                      ]),
+                ),
+              ),
+            ),
           ),
           AnimatedPositioned(
             duration: Duration(milliseconds: 400),
@@ -352,8 +365,8 @@ class MyPainter extends CustomPainter {
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          Color.fromARGB(255, 124, 161, 225).withOpacity(.8),
-          Color.fromARGB(255, 0, 92, 197).withOpacity(.8),
+          Color(0xFF00b4d8).withOpacity(.8),
+          Color(0xFF03045e).withOpacity(.8),
         ],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
       ..style = PaintingStyle.fill;

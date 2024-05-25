@@ -8,6 +8,7 @@ final ThemeData lightThemeCustom = ThemeData(
   //   type: BottomNavigationBarType.fixed,
   // ),
   primaryColor: const Color(0xff1976D2),
+  cardColor: Color(0xFFcaf0f8),
   scaffoldBackgroundColor: Color(0xFFE3F2FD),
   appBarTheme: const AppBarTheme(
     color: Color(0xFFCCE5FF),
@@ -22,17 +23,18 @@ final ThemeData lightThemeCustom = ThemeData(
     focusColor: Color(0xFF64B5F6),
     hoverColor: const Color(0xFF1976D2),
     foregroundColor: Color.fromARGB(255, 39, 38, 38),
-    backgroundColor: const Color(0xFF1976D2),
+    backgroundColor: Color(0xFFcaf0f8),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
     elevation: 8.0,
     textStyle: const TextStyle(
       fontWeight: FontWeight.bold,
+      fontFamily: "Poppins",
       color: Color.fromARGB(255, 104, 205, 248),
     ),
     foregroundColor: Color.fromARGB(255, 39, 38, 38),
-    backgroundColor: Color.fromARGB(255, 120, 187, 255),
+    backgroundColor: Color(0xFFcaf0f8),
     minimumSize: const Size(88, 36),
     padding: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
@@ -40,8 +42,8 @@ final ThemeData lightThemeCustom = ThemeData(
         side: BorderSide(width: 18.0, color: Colors.black)),
   )),
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Colors.black),
-    bodyMedium: TextStyle(color: Colors.black),
+    bodyLarge: TextStyle(color: Colors.black, fontFamily: "Poppins"),
+    bodyMedium: TextStyle(color: Colors.black, fontFamily: "Poppins"),
   ),
   buttonTheme: const ButtonThemeData(),
   colorScheme:

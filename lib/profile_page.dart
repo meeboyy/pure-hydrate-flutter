@@ -21,37 +21,34 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(100.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Name: ${userInfo['name']}',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Age: ${userInfo['age']}',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Weight: ${userInfo['weight']} kg',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Daily Goal: ${userInfo['dailyGoal']} ml',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _showEditDialog(context),
-              child: Text('Edit Profile'),
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Name: ${userInfo['name']}',
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Age: ${userInfo['age']}',
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Weight: ${userInfo['weight']} kg',
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Daily Goal: ${userInfo['dailyGoal']} ml',
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () => _showEditDialog(context),
+            child: Text('Edit Profile'),
+          ),
+        ],
       ),
     );
   }

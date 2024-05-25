@@ -55,115 +55,108 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Water Reminder',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    return Container(
+      child: ListView(
+        children: <Widget>[
+          Text(
+            'Water Reminder',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SwitchListTile(
+            title: Text('Enable Reminder'),
+            value: _enableReminder,
+            onChanged: (value) {
+              setState(() {
+                _enableReminder = value;
+              });
+            },
+          ),
+          SizedBox(height: 20),
+          ListTile(
+            title: Text(
+              'Reminder Interval (minutes)',
             ),
-            SwitchListTile(
-              title: Text('Enable Reminder'),
-              value: _enableReminder,
-              onChanged: (value) {
+            trailing: DropdownButton<int>(
+              value: _reminderInterval,
+              onChanged: (int? newValue) {
                 setState(() {
-                  _enableReminder = value;
+                  _reminderInterval = newValue!;
                 });
               },
+              items: <int>[15, 30, 45, 60, 90, 120]
+                  .map<DropdownMenuItem<int>>((int value) {
+                return DropdownMenuItem<int>(
+                  value: value,
+                  child: Text('$value minutes'),
+                );
+              }).toList(),
             ),
-            SizedBox(height: 20),
-            ListTile(
-              title: Text(
-                'Reminder Interval (minutes)',
-              ),
-              trailing: DropdownButton<int>(
-                value: _reminderInterval,
-                onChanged: (int? newValue) {
-                  setState(() {
-                    _reminderInterval = newValue!;
-                  });
-                },
-                items: <int>[15, 30, 45, 60, 90, 120]
-                    .map<DropdownMenuItem<int>>((int value) {
-                  return DropdownMenuItem<int>(
-                    value: value,
-                    child: Text('$value minutes'),
-                  );
-                }).toList(),
-              ),
+          ),
+          SizedBox(height: 20),
+          ListTile(
+            title: Text(
+              'Reminder Sound',
             ),
-            SizedBox(height: 20),
-            ListTile(
-              title: Text(
-                'Reminder Sound',
-              ),
-              trailing: DropdownButton<String>(
-                value: _reminderSound,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _reminderSound = newValue!;
-                  });
-                },
-                items: <String>['Beep', 'Chime', 'Water Drop', 'Bell']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
-            Text(
-              'App Theme',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SwitchListTile(
-              title: Text('Dark Theme'),
-              value: _isDarkTheme,
-              onChanged: (bool value) {
+            trailing: DropdownButton<String>(
+              value: _reminderSound,
+              onChanged: (String? newValue) {
                 setState(() {
-                  _isDarkTheme = value;
+                  _reminderSound = newValue!;
                 });
               },
+              items: <String>['Beep', 'Chime', 'Water Drop', 'Bell']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
-            SizedBox(height: 20),
-            Text(
-              'Daily Goal',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Slider(
-                    value: widget.waterIntake.dailyGoal.toDouble(),
-                    min: 1000,
-                    max: 5000,
-                    divisions: 40,
-                    onChanged: (value) {
-                      widget.onDailyGoalChanged(
-                          widget.waterIntake.dailyGoal.toInt());
-                      setState(() {
-                        widget.waterIntake.dailyGoal = value.toInt();
-                      });
-                    },
-                  ),
-                ),
-                Text('${widget.waterIntake.dailyGoal} ml'),
-              ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveSettings,
-              child: Text('Save Settings'),
-            ),
-          ],
-        ),
+          ),
+          Text(
+            'App Theme',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SwitchListTile(
+            title: Text('Dark Theme'),
+            value: _isDarkTheme,
+            onChanged: (bool value) {
+              setState(() {
+                _isDarkTheme = value;
+              });
+            },
+          ),
+          // SizedBox(height: 20),
+          // Text(
+          //   'Daily Goal',
+          //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          // ),
+          // Row(
+          //   children: <Widget>[
+          //     Expanded(
+          //       child: Slider(
+          //         value: widget.waterIntake.dailyGoal.toDouble(),
+          //         min: 1000,
+          //         max: 5000,
+          //         divisions: 40,
+          //         onChanged: (value) {
+          //           widget.onDailyGoalChanged(
+          //               widget.waterIntake.dailyGoal.toInt());
+          //           setState(() {
+          //             widget.waterIntake.dailyGoal = value.toInt();
+          //           });
+          //         },
+          //       ),
+          //     ),
+          //     Text('${widget.waterIntake.dailyGoal} ml'),
+          //   ],
+          // ),
+          // SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _saveSettings,
+            child: Text('Save Settings'),
+          ),
+        ],
       ),
     );
   }
